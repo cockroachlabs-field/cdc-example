@@ -6,29 +6,29 @@ networks:
 
 services:
 
-  roach-0:
-    container_name: roach-0
-    hostname: roach-0
+  roach-source-0:
+    container_name: roach-source-0
+    hostname: roach-source-0
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-0,roach-1,roach-2
+    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
 
-  roach-1:
-    container_name: roach-1
-    hostname: roach-1
+  roach-source-1:
+    container_name: roach-source-1
+    hostname: roach-source-1
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-0,roach-1,roach-2
+    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
 
-  roach-2:
-    container_name: roach-2
-    hostname: roach-2
+  roach-source-2:
+    container_name: roach-source-2
+    hostname: roach-source-2
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-0,roach-1,roach-2
+    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
 
   lb:
     container_name: lb
@@ -40,9 +40,9 @@ services:
       - "5432:5432"
       - "8080:8080"
     links:
-      - roach-0
-      - roach-1
-      - roach-2
+      - roach-source-0
+      - roach-source-1
+      - roach-source-2
 
   generator:
     container_name: generator
@@ -53,9 +53,9 @@ services:
     links:
       - lb
 
-  roach-backup:
-    container_name: roach-backup
-    hostname: roach-backup
+  roach-destination:
+    container_name: roach-destination
+    hostname: roach-destination
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
