@@ -34,7 +34,7 @@ docker-compose start zookeeper
 docker-compose start kafka
 
 echo "sleeping..."
-sleep 10
+sleep 20
 
 # create kafka topic
 docker-compose exec kafka /usr/bin/kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic usertable
