@@ -27,7 +27,7 @@ sleep 10
 
 # create backup database
 docker-compose exec roach-destination /cockroach/cockroach sql --insecure --execute="CREATE DATABASE ycsb_backup;"
-docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="CREATE TABLE usertable (ycsb_key INT8 NOT NULL, field1 STRING NULL, field2 STRING NULL, field3 STRING NULL, field4 STRING NULL, field5 STRING NULL, field6 STRING NULL, field7 STRING NULL, field8 STRING NULL, field9 STRING NULL, field10 STRING NULL)"
+docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="CREATE TABLE usertable (ycsb_key INT8 NOT NULL, field1 STRING NULL, field2 STRING NULL, field3 STRING NULL, field4 STRING NULL, field5 STRING NULL, field6 STRING NULL, field7 STRING NULL, field8 STRING NULL, field9 STRING NULL, field10 STRING NULL);"
 
 # start kafka and zk
 docker-compose start zookeeper
@@ -51,3 +51,5 @@ docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --databas
 # view kafka topic
 # docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=usertable
 
+# select from backup
+# docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="select * from usertable;"
