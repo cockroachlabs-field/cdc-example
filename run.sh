@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-## start original database and load balancer
+## start source database and load balancer
 docker-compose up --no-start
 docker-compose start roach-source-0
 docker-compose start roach-source-1
@@ -16,10 +16,10 @@ sleep 5
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING cluster.organization = 'tv';"
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.license = 'crl-0-EPGo8OMFGAIiAnR2';"
 
-# start generator app on original database
+# start generator app on source database
 docker-compose start generator
 
-# start backup database nodes
+# start destination database nodes
 docker-compose start roach-destination
 
 echo "sleeping..."
@@ -44,6 +44,7 @@ sleep 10
 
 # start changefeed
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database ycsb --execute="CREATE CHANGEFEED FOR TABLE usertable INTO 'kafka://kafka:9092';"
+#docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database ycsb --execute="CREATE CHANGEFEED FOR TABLE usertable INTO 'kafka://172.29.0.9:9092';"
 
 
 
