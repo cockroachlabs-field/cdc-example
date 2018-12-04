@@ -36,3 +36,8 @@ Use this to verify data has been loaded into `destination`
 ```bash
 docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="select * from usertable;"
 ```
+
+List all Kafka topics
+```bash
+docker-compose exec kafka /usr/bin/kafka-topics --list --zookeeper zookeeper:2181
+```
