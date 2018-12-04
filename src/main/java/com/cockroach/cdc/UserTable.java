@@ -73,4 +73,21 @@ class UserTable {
     public String getField10() {
         return field10;
     }
+
+    @Override
+    public String toString() {
+        return "UserTable{" +
+                "ycsb_key=" + ycsb_key +
+                ", field1='" + field1 + '\'' +
+                ", field2='" + field2 + '\'' +
+                ", field3='" + field3 + '\'' +
+                ", field4='" + field4 + '\'' +
+                ", field5='" + field5 + '\'' +
+                ", field6='" + field6 + '\'' +
+                ", field7='" + field7 + '\'' +
+                ", field8='" + field8 + '\'' +
+                ", field9='" + field9 + '\'' +
+                ", field10='" + field10 + '\'' +
+                '}';
+    }
 }

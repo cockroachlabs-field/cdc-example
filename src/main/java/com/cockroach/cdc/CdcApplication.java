@@ -53,17 +53,16 @@ public class CdcApplication {
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfigs(),
                 new StringDeserializer(),
-                new JsonDeserializer<>(UserTable.class));
+                new JsonDeserializer<>(UserTable.class)
+        );
     }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, UserTable> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, UserTable> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, UserTable> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
-
 
 
     @KafkaListener(topics = "usertable")
@@ -82,5 +81,7 @@ public class CdcApplication {
                 userTable.getField9(),
                 userTable.getField10()
         );
+
+        log.debug("loaded usertable into destination:  {}", userTable.toString());
     }
 }

@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.cockroach</groupId>
-    <artifactId>cdc</artifactId>
+    <artifactId>cdc-example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>cdc</name>
+    <name>cdc-example</name>
     <description>cdc example using kafka</description>
 
     <parent>
