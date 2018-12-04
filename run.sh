@@ -9,7 +9,7 @@ docker-compose start roach-source-2
 docker-compose exec roach-source-0 /cockroach/cockroach init --insecure
 docker-compose start lb
 
-echo "sleeping..."
+echo "waiting for source to initialize..."
 sleep 5
 
 # configure license
@@ -22,7 +22,7 @@ docker-compose start generator
 # start destination database nodes
 docker-compose start roach-destination
 
-echo "sleeping..."
+echo "waiting for destination to start..."
 sleep 10
 
 # create backup database
@@ -33,13 +33,13 @@ docker-compose exec roach-destination /cockroach/cockroach sql --insecure --data
 docker-compose start zookeeper
 docker-compose start kafka
 
-echo "sleeping..."
+echo "waiting for kafka and zookeeper to start..."
 sleep 20
 
 # create kafka topic
 docker-compose exec kafka /usr/bin/kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic usertable
 
-echo "sleeping..."
+echo "waiting for topic to be created before creating changefeed..."
 sleep 10
 
 # start changefeed
