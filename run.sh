@@ -44,12 +44,3 @@ sleep 10
 
 # start changefeed
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database ycsb --execute="CREATE CHANGEFEED FOR TABLE usertable INTO 'kafka://kafka:9092';"
-
-# use to show running jobs
-# docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SHOW JOBS;"
-
-# view kafka topic
-# docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=usertable
-
-# select from backup
-# docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="select * from usertable;"
