@@ -12,7 +12,7 @@ services:
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
+    command: start --logtostderr --insecure
 
   roach-source-1:
     container_name: roach-source-1
@@ -20,7 +20,9 @@ services:
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
+    command: start --logtostderr --insecure --join=roach-source-0
+    depends_on:
+      - roach-source-0
 
   roach-source-2:
     container_name: roach-source-2
@@ -28,7 +30,9 @@ services:
     image: cockroachdb/cockroach:latest
     networks:
       - roach-net
-    command: start --logtostderr --insecure --join=roach-source-0,roach-source-1,roach-source-2
+    command: start --logtostderr --insecure --join=roach-source-0
+    depends_on:
+      - roach-source-0
 
   lb:
     container_name: lb

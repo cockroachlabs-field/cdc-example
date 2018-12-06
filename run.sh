@@ -6,7 +6,6 @@ docker-compose up --no-start
 docker-compose start roach-source-0
 docker-compose start roach-source-1
 docker-compose start roach-source-2
-docker-compose exec roach-source-0 /cockroach/cockroach init --insecure
 docker-compose start lb
 
 echo "waiting for source to initialize..."
