@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CRDB_ORG_NAME = "xxx"
+CRDB_LICENSE = "xxx"
 
 ## start source database and load balancer
 docker-compose up --no-start
@@ -12,8 +14,8 @@ echo "waiting for source to initialize..."
 sleep 5
 
 # configure license
-docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING cluster.organization = 'tv';"
-docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.license = 'crl-0-EPGo8OMFGAIiAnR2';"
+docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING cluster.organization = '${CRDB_ORG_NAME}';"
+docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.CRDB_LICENSE = '${CRDB_LICENSE}';"
 
 # start generator app on source database
 docker-compose start generator
