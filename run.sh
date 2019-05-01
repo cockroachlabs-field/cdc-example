@@ -1,7 +1,17 @@
 #!/bin/bash
 
-CRDB_ORG_NAME = "xxx"
-CRDB_LICENSE = "xxx"
+CRDB_ORG_NAME=$1
+CRDB_LICENSE_KEY=$2
+
+if [[ -z "CRDB_ORG_NAME" ]]; then
+    echo "Must provide CRDB_ORG_NAME as the first parameter. Example './run.sh CRDB_ORG_NAME CRDB_LICENSE_KEY'." 1>&2
+    exit 1
+fi
+
+if [[ -z "CRDB_LICENSE_KEY" ]]; then
+    echo "Must provide CRDB_LICENSE_KEY as the second parameter. Example './run.sh CRDB_ORG_NAME CRDB_LICENSE_KEY'." 1>&2
+    exit 1
+fi
 
 ## start source database and load balancer
 docker-compose up --no-start
@@ -15,7 +25,7 @@ sleep 5
 
 # configure license
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING cluster.organization = '${CRDB_ORG_NAME}';"
-docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.CRDB_LICENSE = '${CRDB_LICENSE}';"
+docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.license = '${CRDB_LICENSE_KEY}';"
 
 # start generator app on source database
 docker-compose start generator
