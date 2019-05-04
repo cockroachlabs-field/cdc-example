@@ -1,4 +1,4 @@
-package io.crdb.demo.cdc.producer;
+package io.crdb.cdc.producer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

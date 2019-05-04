@@ -1,4 +1,4 @@
-package io.crdb.demo.cdc.consumer;
+package io.crdb.cdc.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

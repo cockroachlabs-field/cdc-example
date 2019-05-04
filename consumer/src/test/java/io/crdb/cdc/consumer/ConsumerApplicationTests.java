@@ -1,4 +1,4 @@
-package io.crdb.demo.cdc.consumer;
+package io.crdb.cdc.consumer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
