@@ -1,25 +1,17 @@
 version: '3.5'
 
-networks:
-  roach-net:
-    driver: bridge
-
 services:
 
   roach-source-0:
     container_name: roach-source-0
     hostname: roach-source-0
     image: cockroachdb/cockroach:latest
-    networks:
-      - roach-net
     command: start --logtostderr --insecure
 
   roach-source-1:
     container_name: roach-source-1
     hostname: roach-source-1
     image: cockroachdb/cockroach:latest
-    networks:
-      - roach-net
     command: start --logtostderr --insecure --join=roach-source-0
     depends_on:
       - roach-source-0
@@ -28,8 +20,6 @@ services:
     container_name: roach-source-2
     hostname: roach-source-2
     image: cockroachdb/cockroach:latest
-    networks:
-      - roach-net
     command: start --logtostderr --insecure --join=roach-source-0
     depends_on:
       - roach-source-0
@@ -37,43 +27,29 @@ services:
   lb:
     container_name: lb
     hostname: lb
-    build: ./nginx
-    networks:
-      - roach-net
+    build: haproxy
     ports:
       - "5432:5432"
       - "8080:8080"
+      - "8081:8081"
     links:
       - roach-source-0
       - roach-source-1
       - roach-source-2
 
-  generator:
-    container_name: generator
-    hostname: generator
-    build: ./generator
-    networks:
-      - roach-net
-    links:
-      - lb
-
   roach-destination:
     container_name: roach-destination
     hostname: roach-destination
     image: cockroachdb/cockroach:latest
-    networks:
-      - roach-net
     command: start --logtostderr --insecure
     ports:
-      - "8081:8080"
+      - "8082:8080"
       - "26257:26257"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     hostname: zookeeper
-    networks:
-      - roach-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -82,8 +58,6 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     hostname: kafka
-    networks:
-      - roach-net
     depends_on:
       - zookeeper
     ports:

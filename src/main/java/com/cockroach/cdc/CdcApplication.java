@@ -70,7 +70,7 @@ public class CdcApplication {
     @KafkaListener(topics = "usertable")
     public void listen(@Payload UserTable userTable, @Headers MessageHeaders headers) {
 
-        jdbcTemplate.update("UPSERT INTO usertable (ycsb_key, field1, field2, field3, field4, field5, field6, field7, field8, field9, field10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        jdbcTemplate.update("UPSERT INTO usertable (ycsb_key, field1, field2, field3, field4, field5, field6, field7, field8, field9) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 userTable.getYcsb_key(),
                 userTable.getField1(),
                 userTable.getField2(),
@@ -80,8 +80,7 @@ public class CdcApplication {
                 userTable.getField6(),
                 userTable.getField7(),
                 userTable.getField8(),
-                userTable.getField9(),
-                userTable.getField10()
+                userTable.getField9()
         );
 
         log.debug("loaded usertable into destination:  {}", userTable.toString());

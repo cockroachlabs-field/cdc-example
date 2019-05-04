@@ -1,7 +1,7 @@
 package com.cockroach.cdc;
 
 class UserTable {
-    private long ycsb_key;
+    private String ycsb_key;
     private String field1;
     private String field2;
     private String field3;
@@ -11,12 +11,11 @@ class UserTable {
     private String field7;
     private String field8;
     private String field9;
-    private String field10;
 
     public UserTable() {
     }
 
-    public UserTable(long ycsb_key, String field1, String field2, String field3, String field4, String field5, String field6, String field7, String field8, String field9, String field10) {
+    public UserTable(String ycsb_key, String field1, String field2, String field3, String field4, String field5, String field6, String field7, String field8, String field9) {
         this.ycsb_key = ycsb_key;
         this.field1 = field1;
         this.field2 = field2;
@@ -27,10 +26,9 @@ class UserTable {
         this.field7 = field7;
         this.field8 = field8;
         this.field9 = field9;
-        this.field10 = field10;
     }
 
-    public long getYcsb_key() {
+    public String getYcsb_key() {
         return ycsb_key;
     }
 
@@ -70,9 +68,6 @@ class UserTable {
         return field9;
     }
 
-    public String getField10() {
-        return field10;
-    }
 
     @Override
     public String toString() {
@@ -87,7 +82,6 @@ class UserTable {
                 ", field7='" + field7 + '\'' +
                 ", field8='" + field8 + '\'' +
                 ", field9='" + field9 + '\'' +
-                ", field10='" + field10 + '\'' +
                 '}';
     }
 }
