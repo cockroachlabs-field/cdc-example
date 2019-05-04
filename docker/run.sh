@@ -27,16 +27,20 @@ sleep 5
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING cluster.organization = '${CRDB_ORG_NAME}';"
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING enterprise.license = '${CRDB_LICENSE_KEY}';"
 docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="SET CLUSTER SETTING kv.rangefeed.enabled = true;"
+docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute="CREATE DATABASE source_db;"
 
 # start destination database node
 docker-compose start roach-destination
 
 echo "waiting for destination to start..."
-sleep 10
+sleep 5
+
+docker-compose exec roach-destination /cockroach/cockroach sql --insecure --execute="CREATE DATABASE destination_db;"
+
 
 # create backup database
-docker-compose exec roach-destination /cockroach/cockroach sql --insecure --execute="CREATE DATABASE ycsb_backup;"
-docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="CREATE TABLE usertable (ycsb_key STRING NOT NULL, field1 STRING NULL, field2 STRING NULL, field3 STRING NULL, field4 STRING NULL, field5 STRING NULL, field6 STRING NULL, field7 STRING NULL, field8 STRING NULL, field9 STRING NULL, field10 STRING NULL);"
+#docker-compose exec roach-destination /cockroach/cockroach sql --insecure --execute="CREATE DATABASE ycsb_backup;"
+#ocker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="CREATE TABLE usertable (ycsb_key STRING NOT NULL, field1 STRING NULL, field2 STRING NULL, field3 STRING NULL, field4 STRING NULL, field5 STRING NULL, field6 STRING NULL, field7 STRING NULL, field8 STRING NULL, field9 STRING NULL, field10 STRING NULL);"
 
 
 # start kafka and zk
@@ -49,15 +53,15 @@ sleep 20
 # create kafka topic
 docker-compose exec kafka /usr/bin/kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic usertable
 
-echo "waiting for topic to be created before creating changefeed..."
-sleep 10
+#echo "waiting for topic to be created before creating changefeed..."
+#sleep 10
 
 # start changefeed
-docker-compose exec roach-source-0 /cockroach/cockroach workload init ycsb
+#ocker-compose exec roach-source-0 /cockroach/cockroach workload init ycsb
 
-docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database ycsb --execute="CREATE CHANGEFEED FOR TABLE usertable INTO 'kafka://kafka:9092';"
+#docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database ycsb --execute="CREATE CHANGEFEED FOR TABLE usertable INTO 'kafka://kafka:9092';"
 
-docker-compose exec roach-source-0 /cockroach/cockroach workload run ycsb --duration=30m
+#docker-compose exec roach-source-0 /cockroach/cockroach workload run ycsb --duration=30m
 
 #docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --database bank --execute="select * from bank;"
 
