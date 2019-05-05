@@ -11,6 +11,8 @@ import javax.management.timer.Timer;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.UUID;
 
 @Component
@@ -18,7 +20,7 @@ public class DataGenerator implements ApplicationRunner {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private static final String SQL = "INSERT INTO source_table (id, balance) VALUES (?, ?)";
+    private static final String SQL = "INSERT INTO source_table (id, balance, created_timestamp) VALUES (?, ?, ?)";
 
     private DataSource dataSource;
 
@@ -37,6 +39,7 @@ public class DataGenerator implements ApplicationRunner {
 
                 statement.setObject(1, UUID.randomUUID());
                 statement.setInt(2, i);
+                statement.setTimestamp(3, Timestamp.from(Instant.now()));
 
                 final int updated = statement.executeUpdate();
 

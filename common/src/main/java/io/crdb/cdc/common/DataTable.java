@@ -1,5 +1,6 @@
 package io.crdb.cdc.common;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class DataTable {
@@ -8,9 +9,12 @@ public class DataTable {
 
     private Integer balance;
 
-    public DataTable(UUID id, Integer balance) {
+    private Timestamp createdTimestamp;
+
+    public DataTable(UUID id, Integer balance, Timestamp createdTimestamp) {
         this.id = id;
         this.balance = balance;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public UUID getId() {
@@ -21,11 +25,16 @@ public class DataTable {
         return balance;
     }
 
+    public Timestamp getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
     @Override
     public String toString() {
         return "DataTable{" +
                 "id=" + id +
                 ", balance=" + balance +
+                ", createdTimestamp=" + createdTimestamp +
                 '}';
     }
 }
