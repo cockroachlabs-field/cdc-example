@@ -16,16 +16,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Component
-public class DataGenerator implements ApplicationRunner {
+public class Producer implements ApplicationRunner {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private static final String SQL = "INSERT INTO source_table (id, balance, created_timestamp) VALUES (?, ?, ?)";
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     @Autowired
-    public DataGenerator(DataSource dataSource) {
+    public Producer(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
