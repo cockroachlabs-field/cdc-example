@@ -20,4 +20,12 @@ public class DataTable {
     public Integer getBalance() {
         return balance;
     }
+
+    @Override
+    public String toString() {
+        return "DataTable{" +
+                "id=" + id +
+                ", balance=" + balance +
+                '}';
+    }
 }
