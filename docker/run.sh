@@ -51,7 +51,7 @@ echo "waiting for kafka and zookeeper to start..."
 sleep 20
 
 # create kafka topic
-docker-compose exec kafka /usr/bin/kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic usertable
+#docker-compose exec kafka /usr/bin/kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic usertable
 
 #echo "waiting for topic to be created before creating changefeed..."
 #sleep 10

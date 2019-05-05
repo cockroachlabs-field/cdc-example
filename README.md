@@ -9,7 +9,6 @@ The following services are started:
 * `roach-source-1` - Cockroach cluster node serving as CDC source
 * `roach-source-2` - Cockroach cluster node serving as CDC source
 * `lb` - Nginx LB in front of source nodes
-* `generator` - simple node running `ycsb`
 * `roach-destination` - single Cockroach node serving as CDC destination
 * `zookeeper` - required component of Confluent Kafka instance
 * `kafka` - Confluent Kafka instance that stores CDC data
@@ -29,12 +28,12 @@ docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute
 
 Use this to see data in Kafka topic
 ```bash
-docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=usertable
+docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=source_table
 ```
 
 Use this to verify data has been loaded into `destination`
 ```bash
-docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database ycsb_backup --execute="select count(*) from usertable;"
+docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database destination_db --execute="select count(*) from destination_table;"
 ```
 
 List all Kafka topics
