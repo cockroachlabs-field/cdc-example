@@ -25,9 +25,9 @@ public class KafkaConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "json");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "cdc_consumer_group");
+        //props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        //props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 
         return props;
     }
