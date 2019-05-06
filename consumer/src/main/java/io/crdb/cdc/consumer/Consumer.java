@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -15,6 +16,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 @Component
 public class Consumer {
@@ -34,10 +36,11 @@ public class Consumer {
     @KafkaListener(topics = "source_table")
     public void listen(@Payload ChangeFeed changeFeed, @Headers MessageHeaders headers) {
 
-        // kafka_receivedMessageKey
-        // ["e8dd2ecf-b961-4df3-9b4c-4b6c2a07bffd"]
+        final String[] ids = headers.get(KafkaHeaders.RECEIVED_MESSAGE_KEY, String[].class);
 
-        log.debug("id = {}, value = {}", headers.getId(), changeFeed.toString());
+        final UUID id = UUID.fromString(ids[0]);
+
+        log.debug("id = {}, value = {}", id, changeFeed.toString());
 
         DataTable after = changeFeed.getAfter();
 
@@ -50,9 +53,9 @@ public class Consumer {
                 statement.setInt(2, after.getBalance());
                 statement.setTimestamp(3, after.getCreatedTimestamp());
 
-                statement.executeUpdate();
+                final int updated = statement.executeUpdate();
 
-                log.debug("upsert data into destination:  {}", after.toString());
+                log.debug("upsert {} records into destination:  {}", updated, after.toString());
 
             } catch (SQLException e) {
                 log.error(e.getMessage(), e);
@@ -63,14 +66,16 @@ public class Consumer {
             try (final Connection connection = dataSource.getConnection();
                  final PreparedStatement statement = connection.prepareStatement(DELETE)) {
 
-                statement.setObject(1, headers.getId());
-                statement.executeUpdate();
+                statement.setObject(1, id);
 
-                log.debug("deleted data from destination with id {}", headers.getId());
+                final int deleted = statement.executeUpdate();
+
+                log.debug("deleted {} records from destination with id {}", deleted, id);
 
             } catch (SQLException e) {
                 log.error(e.getMessage(), e);
             }
+
         }
 
 
