@@ -51,39 +51,30 @@ public class CdcApplication {
     }
 
     @Bean
-    public ConsumerFactory<String, UserTable> consumerFactory() {
+    public ConsumerFactory<String, KV> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfigs(),
                 new StringDeserializer(),
-                new JsonDeserializer<>(UserTable.class)
+                new JsonDeserializer<>(KV.class)
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserTable> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, UserTable> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, KV> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, KV> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 
 
-    @KafkaListener(topics = "usertable")
-    public void listen(@Payload UserTable userTable, @Headers MessageHeaders headers) {
+    @KafkaListener(topics = "kv")
+    public void listen(@Payload KV kv, @Headers MessageHeaders headers) {
 
-        jdbcTemplate.update("UPSERT INTO usertable (ycsb_key, field1, field2, field3, field4, field5, field6, field7, field8, field9, field10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                userTable.getYcsb_key(),
-                userTable.getField1(),
-                userTable.getField2(),
-                userTable.getField3(),
-                userTable.getField4(),
-                userTable.getField5(),
-                userTable.getField6(),
-                userTable.getField7(),
-                userTable.getField8(),
-                userTable.getField9(),
-                userTable.getField10()
+        jdbcTemplate.update("UPSERT INTO kv (k, v) VALUES (?, ?)",
+                kv.getK(),
+                kv.getV()
         );
 
-        log.debug("loaded usertable into destination:  {}", userTable.toString());
+        log.debug("loaded kv into destination:  {}", kv.toString());
     }
 }
