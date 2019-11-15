@@ -16,11 +16,14 @@ This example consists of 2 parts:
 2) You can verify that each CockroachDB instance is running by visting the following URLS:
     * Source Cockroach UI - http://localhost:8080
     * Destination Cockroach UI - http://localhost:8081
-1) Once the services have started properly, run the `producer` Spring Boot application.  This will load slowly load data into the `source` database.
-```
-java -jar producer-0.0.1-SNAPSHOT.jar
-```
-1) While the `producer` is running, run the `consumer` Spring Boot application.  The `consumer` will read from Kafka and populate the `destination` database.
+1) Once the services have started properly, start the `producer` Spring Boot application.  This will slowly load data into the `source` database.
+    ```
+    java -jar producer-0.0.1-SNAPSHOT.jar
+    ```
+1) While the `producer` is running, start the `consumer` Spring Boot application.  The `consumer` will read from Kafka and populate the `destination` database.
+    ```
+    java -jar consumer-0.0.1-SNAPSHOT.jar
+    ```
 1) When you are done, you can stop all services with `down.sh`.  To do a full system prune run `prune.sh`.
 
 ## Helpful Commands
@@ -35,7 +38,12 @@ Use this to see data in Kafka topic
 docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --from-beginning --topic=source_table
 ```
 
-Use this to verify data has been loaded into `roach-destination`
+Use this to view data in the `soucre` database
+```bash
+docker-compose exec roach-source /cockroach/cockroach sql --insecure --database source --execute="select count(*) from source_table;"
+```
+
+Use this to verify data has been loaded into the `destination` database 
 ```bash
 docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database destination --execute="select count(*) from destination_table;"
 ```
