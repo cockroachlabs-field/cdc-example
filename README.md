@@ -29,7 +29,7 @@ docker-compose exec crdb-0 /cockroach/cockroach sql --insecure --execute="SHOW J
 
 Use this to see data in Kafka topic
 ```bash
-docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=kv
+docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --from-beginning --topic=kv
 ```
 
 Use this to verify data has been loaded into `destination`
