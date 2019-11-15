@@ -1,4 +1,4 @@
-# Cockroach DB CDC Example
+# CockroachDB CDC Example
 
 Based on https://www.cockroachlabs.com/docs/stable/change-data-capture.html#create-a-changefeed-connected-to-kafka
 
