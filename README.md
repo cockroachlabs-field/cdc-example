@@ -28,7 +28,7 @@ docker-compose exec roach-source-0 /cockroach/cockroach sql --insecure --execute
 
 Use this to see data in Kafka topic
 ```bash
-docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --property print.key=true --from-beginning --topic=source_table
+docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --from-beginning --topic=source_table
 ```
 
 Use this to verify data has been loaded into `destination`

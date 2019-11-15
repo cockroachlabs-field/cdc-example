@@ -2,49 +2,23 @@ version: '3.5'
 
 services:
 
-  roach-source-0:
-    container_name: roach-source-0
-    hostname: roach-source-0
+  roach-source:
+    container_name: roach-source
+    hostname: roach-source
     image: cockroachdb/cockroach:latest
-    command: start --logtostderr --insecure
-
-  roach-source-1:
-    container_name: roach-source-1
-    hostname: roach-source-1
-    image: cockroachdb/cockroach:latest
-    command: start --logtostderr --insecure --join=roach-source-0
-    depends_on:
-      - roach-source-0
-
-  roach-source-2:
-    container_name: roach-source-2
-    hostname: roach-source-2
-    image: cockroachdb/cockroach:latest
-    command: start --logtostderr --insecure --join=roach-source-0
-    depends_on:
-      - roach-source-0
-
-  lb:
-    container_name: lb
-    hostname: lb
-    build: haproxy
+    command: start-single-node --logtostderr=WARNING --insecure
     ports:
-      - "5432:5432"
       - "8080:8080"
-      - "8081:8081"
-    links:
-      - roach-source-0
-      - roach-source-1
-      - roach-source-2
+      - "26257:26257"
 
   roach-destination:
     container_name: roach-destination
     hostname: roach-destination
     image: cockroachdb/cockroach:latest
-    command: start --logtostderr --insecure
+    command: start-single-node --logtostderr=WARNING --insecure
     ports:
-      - "8082:8080"
-      - "26257:26257"
+      - "8081:8080"
+      - "26258:26257"
 
   zookeeper:
     container_name: zookeeper

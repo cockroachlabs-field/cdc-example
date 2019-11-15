@@ -36,6 +36,8 @@ public class Producer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        int globalOperationCounter = 1;
+
         List<UUID> ids = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ids.add(UUID.randomUUID());
@@ -54,9 +56,10 @@ public class Producer implements ApplicationRunner {
 
                 statement.executeUpdate();
 
-                log.debug("inserted record with id {}", idToInsert);
+                log.debug("operation {}: inserted record with id {}", globalOperationCounter, idToInsert);
 
                 insertCounter++;
+                globalOperationCounter++;
             }
 
             Thread.sleep(Timer.ONE_SECOND);
@@ -71,7 +74,9 @@ public class Producer implements ApplicationRunner {
             statement.setObject(2, idToUpdate);
             statement.executeUpdate();
 
-            log.debug("updated record with id {}", idToUpdate);
+            log.debug("operation {}: updated record with id {}", globalOperationCounter, idToUpdate);
+
+            globalOperationCounter++;
         }
 
         Thread.sleep(Timer.ONE_SECOND);
@@ -84,7 +89,7 @@ public class Producer implements ApplicationRunner {
             statement.setObject(1, idToDelete);
             statement.executeUpdate();
 
-            log.debug("deleted record with id {}", idToDelete);
+            log.debug("operation {}: deleted record with id {}", globalOperationCounter, idToDelete);
         }
 
         Thread.sleep(Timer.ONE_SECOND);
