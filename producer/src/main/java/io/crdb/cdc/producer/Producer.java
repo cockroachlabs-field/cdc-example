@@ -36,6 +36,10 @@ public class Producer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        log.info("sleeping for 1 minute before executing sql statements on the 'source` database...");
+
+        Thread.sleep(Timer.ONE_MINUTE);
+
         int globalOperationCounter = 1;
 
         List<UUID> ids = new ArrayList<>();
@@ -62,7 +66,7 @@ public class Producer implements ApplicationRunner {
                 globalOperationCounter++;
             }
 
-            Thread.sleep(Timer.ONE_SECOND);
+            Thread.sleep(Timer.ONE_SECOND * 10);
         }
 
         UUID idToUpdate = ids.get(0);
@@ -79,7 +83,7 @@ public class Producer implements ApplicationRunner {
             globalOperationCounter++;
         }
 
-        Thread.sleep(Timer.ONE_SECOND);
+        Thread.sleep(Timer.ONE_SECOND * 10);
 
         UUID idToDelete = ids.get(1);
 
@@ -92,6 +96,7 @@ public class Producer implements ApplicationRunner {
             log.debug("operation {}: deleted record with id {}", globalOperationCounter, idToDelete);
         }
 
-        Thread.sleep(Timer.ONE_SECOND);
+        log.info("sleeping for 1 minute before shutting down Producer service...");
+        Thread.sleep(Timer.ONE_MINUTE);
     }
 }
