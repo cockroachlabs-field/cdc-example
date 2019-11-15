@@ -18,11 +18,11 @@ This example consists of 2 parts:
     * Destination Cockroach UI - http://localhost:8081
 1) Once the services have started properly, start the `producer` Spring Boot application.  This will slowly load data into the `source` database.
     ```
-    java -jar producer-0.0.1-SNAPSHOT.jar
+    ./mvnw -pl producer -am spring-boot:run
     ```
 1) While the `producer` is running, start the `consumer` Spring Boot application.  The `consumer` will read from Kafka and populate the `destination` database.
     ```
-    java -jar consumer-0.0.1-SNAPSHOT.jar
+    ./mvnw -pl consumer -am spring-boot:run
     ```
 1) When you are done, you can stop all services with `down.sh`.  To do a full system prune run `prune.sh`.
 
