@@ -2,40 +2,14 @@ version: '3.5'
 
 services:
 
-  crdb-0:
-    container_name: crdb-0
-    hostname: crdb-0
+  roach-source:
+    container_name: roach-source
+    hostname: roach-source
     image: cockroachdb/cockroach:latest
-    command: start --logtostderr=WARNING --insecure
-
-  crdb-1:
-    container_name: crdb-1
-    hostname: crdb-1
-    image: cockroachdb/cockroach:latest
-    command: start --logtostderr=WARNING --insecure --join=crdb-0
-    depends_on:
-      - crdb-0
-
-  crdb-2:
-    container_name: crdb-2
-    hostname: crdb-2
-    image: cockroachdb/cockroach:latest
-    command: start --logtostderr=WARNING --insecure --join=crdb-0
-    depends_on:
-      - crdb-0
-
-  lb:
-    container_name: lb
-    hostname: lb
-    build: haproxy
+    command: start-single-node --logtostderr=WARNING --insecure
     ports:
-      - "5432:5432"
       - "8080:8080"
-      - "8081:8081"
-    links:
-      - crdb-0
-      - crdb-1
-      - crdb-2
+      - "26257:26257"
 
   roach-destination:
     container_name: roach-destination
@@ -43,21 +17,21 @@ services:
     image: cockroachdb/cockroach:latest
     command: start-single-node --logtostderr=WARNING --insecure
     ports:
-      - "8082:8080"
-      - "26257:26257"
+      - "8081:8080"
+      - "26258:26257"
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     hostname: zookeeper
+    image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: confluentinc/cp-kafka:latest
     container_name: kafka
     hostname: kafka
+    image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
     ports:
