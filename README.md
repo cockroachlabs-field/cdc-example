@@ -33,7 +33,7 @@ docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=loc
 
 Use this to verify data has been loaded into `destination`
 ```bash
-docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database destination_db --execute="select count(*) from destination_table;"
+docker-compose exec roach-destination /cockroach/cockroach sql --insecure --database destination --execute="select count(*) from destination_table;"
 ```
 
 List all Kafka topics
