@@ -2,19 +2,26 @@
 
 Based on https://www.cockroachlabs.com/docs/stable/change-data-capture.html#create-a-changefeed-connected-to-kafka
 
-To get started, simply run `./up.sh CRDB_ORG_NAME CRDB_LICENSE_KEY` where `CRDB_ORG_NAME` is your CRDB Enterprise License Org and `CRDB_LICENSE_KEY` is your CRDB Enterprise License Key.  For now, executing `docker-compose up` directly is not supported.  To stop all services run `down.sh`.  To do a full system prune run `prune.sh`.
+This example consists of 2 parts:
+* A collection of Docker Compose services
+    * `roach-source` - single CockroachDB node serving as CDC source
+    * `roach-destination` - single CockroachDB node serving as CDC destination
+    * `zookeeper` - required component of Confluent Kafka instance
+    * `kafka` - Confluent Kafka instance that stores CDC data
+* Two Spring Boot applications... one for inserting data into the `source` CockroachDB instance (the producer) and one for reading from Kafka and writing to the `destination` CockroachDB instance (the consumer).
 
-The following services are started:
-* `roach-source` - single CockroachDB node serving as CDC source
-* `roach-destination` - single CockroachDB node serving as CDC destination
-* `zookeeper` - required component of Confluent Kafka instance
-* `kafka` - Confluent Kafka instance that stores CDC data
+## How to Run
 
-
-Once running the following UIs are available:
-
-* Source Cockroach UI - http://localhost:8080
-* Destination Cockroach UI - http://localhost:8081
+1) Execute `./up.sh CRDB_ORG_NAME CRDB_LICENSE_KEY` where `CRDB_ORG_NAME` is your CRDB Enterprise License Org and `CRDB_LICENSE_KEY` is your CRDB Enterprise License Key.  For now, executing `docker-compose up` directly is not supported.  This command will start the required Docker containers.  
+2) You can verify that each CockroachDB instance is running by visting the following URLS:
+    * Source Cockroach UI - http://localhost:8080
+    * Destination Cockroach UI - http://localhost:8081
+1) Once the services have started properly, run the `producer` Spring Boot application.  This will load slowly load data into the `source` database.
+```
+java -jar producer-0.0.1-SNAPSHOT.jar
+```
+1) While the `producer` is running, run the `consumer` Spring Boot application.  The `consumer` will read from Kafka and populate the `destination` database.
+1) When you are done, you can stop all services with `down.sh`.  To do a full system prune run `prune.sh`.
 
 ## Helpful Commands
 
