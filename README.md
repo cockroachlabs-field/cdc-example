@@ -13,7 +13,7 @@ This example consists of 2 parts:
 ## How to Run
 
 1) Execute `./up.sh CRDB_ORG_NAME CRDB_LICENSE_KEY` where `CRDB_ORG_NAME` is your CRDB Enterprise License Org and `CRDB_LICENSE_KEY` is your CRDB Enterprise License Key.  For now, executing `docker-compose up` directly is not supported.  This command will start the required Docker containers.  
-2) You can verify that each CockroachDB instance is running by visting the following URLS:
+2) You can verify that each CockroachDB instance is running by visiting the following URLS:
     * Source Cockroach UI - http://localhost:8080
     * Destination Cockroach UI - http://localhost:8081
 1) Once the services have started properly, start the `producer` Spring Boot application.  This will slowly load data into the `source` database.
