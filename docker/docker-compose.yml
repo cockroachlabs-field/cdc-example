@@ -6,7 +6,7 @@ services:
     container_name: roach-source
     hostname: roach-source
     image: cockroachdb/cockroach:latest
-    command: start-single-node --logtostderr=WARNING --insecure
+    command: start-single-node --cluster-name=roach-source --logtostderr=WARNING --insecure
     ports:
       - "8080:8080"
       - "26257:26257"
@@ -15,7 +15,7 @@ services:
     container_name: roach-destination
     hostname: roach-destination
     image: cockroachdb/cockroach:latest
-    command: start-single-node --logtostderr=WARNING --insecure
+    command: start-single-node --cluster-name=roach-destination --logtostderr=WARNING --insecure
     ports:
       - "8081:8080"
       - "26258:26257"
