@@ -16,13 +16,13 @@ This example consists of 2 parts:
 2) You can verify that each CockroachDB instance is running by visiting the following URLS:
     * Source Cockroach UI - http://localhost:8080
     * Destination Cockroach UI - http://localhost:8081
-1) Once the services have started properly, start the `producer` Spring Boot application.  This will slowly load data into the `source` database.
-    ```
-    ./mvnw -pl producer -am spring-boot:run
-    ```
-1) While the `producer` is running, start the `consumer` Spring Boot application.  The `consumer` will read from Kafka and populate the `destination` database.
+1) Start the `consumer` Spring Boot application.  The `consumer` application will read from Kafka and populate the `destination` database once the `producer` begins generating data.
     ```
     ./mvnw -pl consumer -am spring-boot:run
+    ```
+1) Start the `producer` Spring Boot application.  This will slowly load data into the `source` database where the `CHANGEFEED` is enabled.  Once data is written to the `source` database the `CHANGEFEED` will publish data to Kafka and be read by the `consumer` application.
+    ```
+    ./mvnw -pl producer -am spring-boot:run
     ```
 1) When you are done, you can stop all services with `down.sh`.  To do a full system prune run `prune.sh`.
 
