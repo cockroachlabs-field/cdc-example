@@ -24,8 +24,8 @@ updates:
     assignees:
       - "timveil"
   - package-ecosystem: "maven"
-    directory: "/web"
+    directory: "/producer"
     schedule:
-      interval: "producer"
+      interval: "daily"
     assignees:
       - "timveil"
