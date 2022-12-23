@@ -36,7 +36,7 @@ public class Consumer {
     @KafkaListener(topics = "source_table")
     public void listen(@Payload ChangeFeed changeFeed, @Headers MessageHeaders headers) {
 
-        final String[] ids = headers.get(KafkaHeaders.RECEIVED_MESSAGE_KEY, String[].class);
+        final String[] ids = headers.get(KafkaHeaders.RECEIVED_KEY, String[].class);
 
         final UUID id = UUID.fromString(ids[0]);
 
