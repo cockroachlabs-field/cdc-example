@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>19</java.version>
-        <spring.boot.version>3.0.2</spring.boot.version>
+        <spring.boot.version>3.0.3</spring.boot.version>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
         <skipTests>true</skipTests>
