@@ -11,11 +11,13 @@ import javax.management.timer.Timer;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 @Component
 public class Producer implements ApplicationRunner {
@@ -25,6 +27,10 @@ public class Producer implements ApplicationRunner {
     private static final String INSERT = "INSERT INTO source_table (id, balance, created_timestamp) VALUES (?, ?, ?)";
     private static final String UPDATE = "UPDATE source_table SET balance = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM source_table WHERE id = ?";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS source_table (id UUID PRIMARY KEY, balance INT, created_timestamp TIMESTAMP);";
+
+    private static final String CREATE_CHANGE = "CREATE CHANGEFEED FOR TABLE source_table INTO 'kafka://kafka:9092';";
+    private static final String SHOW_JOBS = "SHOW CHANGEFEED JOBS;";
 
     private final DataSource dataSource;
 
@@ -39,6 +45,26 @@ public class Producer implements ApplicationRunner {
         log.info("sleeping for 1 minute before executing sql statements on the 'source` database...");
 
         Thread.sleep(Timer.ONE_MINUTE);
+        final Connection conn = dataSource.getConnection();
+        log.info("creating source table...");
+        final PreparedStatement tableStatement = conn.prepareStatement(CREATE_TABLE);
+        tableStatement.executeUpdate();
+
+        log.info("checking for changefeed already created...");
+        final PreparedStatement showJobsStatement = conn.prepareStatement(SHOW_JOBS);
+        ResultSet rs = showJobsStatement.executeQuery();
+        int rowCount = 0;
+        while (rs.next()) {
+            rowCount++;
+        }
+        rs.close();
+        showJobsStatement.close();
+        log.info("number of rows from " + SHOW_JOBS + " " + rowCount);
+        if (rowCount == 0) {
+            log.info("creating changefeed...");
+            final PreparedStatement changefeedStatement = conn.prepareStatement(CREATE_CHANGE);
+            changefeedStatement.executeQuery();
+        }
 
         int globalOperationCounter = 1;
 
@@ -99,4 +125,5 @@ public class Producer implements ApplicationRunner {
         log.info("sleeping for 1 minute before shutting down Producer service...");
         Thread.sleep(Timer.ONE_MINUTE);
     }
+
 }
